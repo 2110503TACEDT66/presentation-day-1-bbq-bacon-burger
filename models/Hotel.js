@@ -30,7 +30,7 @@ HotelSchema.pre('deleteOne',  { document: true, query: false }, async function(n
 });
 
 // Reverse populate with virtuals
-HospitalSchema.virtual('booking', {
+HotelSchema.virtual('booking', {
     ref: 'Booking',
     localField: '_id',
     foreignField: 'hotel',

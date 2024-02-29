@@ -15,7 +15,12 @@ const HotelSchema = new mongoose.Schema({
     },
     tel:{
         type: String
-    }
+    },
+    capacity:{
+        type: Number,
+        min: [1, 'Capacity must be greater than 0'],
+        required: [true, 'Please add a capacity']
+    },
 },
 {
     toJSON: {virtuals: true},

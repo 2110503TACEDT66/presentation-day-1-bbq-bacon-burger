@@ -81,8 +81,17 @@ exports.addBooking = async (req, res, next) => {
             });
         }
 
+        
         req.body.user = req.user.id;
+        const hotelCapacity = hotel.capacity;
+        const hotelExistedBookings = await Booking.find({hotel:req.params.hotelId});
         const existedBookings = await Booking.find({user:req.user.id});
+        if(hotelExistedBookings >= hotelCapacity){
+            return res.status(400).json({
+                success: false,
+                message: `The hotel with ID ${req.params.hotelId} has already reached its capacity`
+            });
+        }
         if(existedBookings.length >= 3 && req.user.role !== 'admin'){
             return res.status(400).json({
                 success: false,

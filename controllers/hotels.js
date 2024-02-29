@@ -1,9 +1,9 @@
-const Hospital = require('../models/Hospital');
+const Hotel = require('../models/Hotel');
 
-//@desc Get all hospitals
-//@route GET /api/v1/hospitals
+//@desc Get all hotels
+//@route GET /api/v1/hotels
 //@access Public
-exports.getHospitals = async (req, res, next) => {
+exports.getHotels = async (req, res, next) => {
     let query;
     //Copy req.query
     const reqQuery = { ...req.query };
@@ -18,7 +18,7 @@ exports.getHospitals = async (req, res, next) => {
     let queryStr = JSON.stringify(reqQuery); 
     queryStr = queryStr.replace(/\b(gt|gte|lt|lte|in)\b/g, match => `$${match}`);
 
-    query = Hospital.find(JSON.parse(queryStr)).populate('appointments');
+    query = Hotel.find(JSON.parse(queryStr)).populate('appointments');
 
     //Select fields
     if (req.query.select) {
@@ -42,10 +42,10 @@ exports.getHospitals = async (req, res, next) => {
 
     //Executing query
     try {
-        const total = await Hospital.countDocuments();
+        const total = await Hotel.countDocuments();
         query = query.skip(startIndex).limit(limit);
 
-        const hospitals = await query;
+        const hotels = await query;
         //Pagination result
         const pagination = {};
 
@@ -65,71 +65,71 @@ exports.getHospitals = async (req, res, next) => {
 
         console.log(req.query);
 
-        res.status(200).json({ success: true, count: hospitals.length, data: hospitals });
+        res.status(200).json({ success: true, count: hotels.length, data: hotels });
     }
     catch (err) {
         res.status(400).json({ success: false });
     }
 };
 
-//@desc Single hospitals
-//@route GET /api/v1/hospitals/:id
+//@desc Single hotels
+//@route GET /api/v1/hotels/:id
 //@access Public
-exports.getHospital = async (req, res, next) => {
+exports.getHotel = async (req, res, next) => {
     try {
-        const hospital = await Hospital.findById(req.params.id);
-        if (!hospital) {
+        const hotel = await Hotel.findById(req.params.id);
+        if (!hotel) {
             return res.status(400).json({ success: false });
         }
-        res.status(200).json({ success: true, data: hospital });
+        res.status(200).json({ success: true, data: hotel });
     }
     catch (err) {
         res.status(400).json({ success: false });
     }
 };
 
-//@desc Create new hospitals
-//@route POST /api/v1/hospitals/:id
+//@desc Create new hotels
+//@route POST /api/v1/hotels/:id
 //@access Private
-exports.createHospital = async (req, res, next) => {
-    const hospital = await Hospital.create(req.body);
+exports.createHotel = async (req, res, next) => {
+    const hotel = await Hotel.create(req.body);
     res.status(201).json({
         success: true,
-        data: hospital
+        data: hotel
     });
 };
 
-//@desc Update hospitals
-//@route PUT /api/v1/hospitals/:id
+//@desc Update hotels
+//@route PUT /api/v1/hotels/:id
 //@access Private
-exports.updateHospital = async (req, res, next) => {
+exports.updateHotel = async (req, res, next) => {
     try {
-        const hospital = await Hospital.findByIdAndUpdate(req.params.id, req.body, {
+        const hotel = await Hotel.findByIdAndUpdate(req.params.id, req.body, {
             new: true,
             runValidators: true
         });
-        if (!hospital) {
+        if (!hotel) {
             return res.status(400).json({ success: false });
         }
-        res.status(200).json({ success: true, data: hospital });
+        res.status(200).json({ success: true, data: hotel });
     } catch (err) {
         res.status(400).json({ success: false });
     }
 
 };
 
-//@desc Delete hospitals
-//@route Delete /api/v1/hospitals/:id
+//@desc Delete hotels
+//@route Delete /api/v1/hotels/:id
 //@access Private
-exports.deleteHospital = async (req, res, next) => {
+exports.deleteHotel = async (req, res, next) => {
     try{
-        const hospital = await Hospital.findById(req.params.id);
-        if (!hospital) {
+        const hotel = await Hotel.findById(req.params.id);
+        if (!hotel) {
             return res.status(404).json({ 
                 success: false, message: `Bootcamp not found with id of ${req.params.id}`
             });
         }
-        await hospital.deleteOne();
+        await hotel.deleteOne();
         res.status(200).json({ success: true, data: {} });
     }catch(err){
         res.status(400).json({ success: false });

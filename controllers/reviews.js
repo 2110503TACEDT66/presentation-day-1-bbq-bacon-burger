@@ -82,16 +82,15 @@ exports.addReview = async (req, res, next) => {
                 message: `No hotel with the id of ${req.params.hotelId}`
             });
         }
-        
-        req.body.user = req.user.id;
+        const existedReview = await Review.findOne({ user: req.user.id, hotel: req.params.hotelId });
+        if (existedReview) {
+            return res.status(400).json({
+                success: false,
+                message: "This user has already made a review for this hotel"
+            });
+        }
 
-        // const existedReview = await Review.find({user: req.user.id, hotel: req.params.hotelId});
-        // if (existedReview) {
-        //     return res.status(400).json({
-        //         success: false,
-        //         message: "this user already make an review on this hotel"
-        //     })
-        // }
+        req.body.user = req.user.id;
         
         const review = await Review.create(req.body);
         res.status(200).json({

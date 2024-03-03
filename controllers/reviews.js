@@ -1,4 +1,5 @@
 const Review = require('../models/Review');
+const Hotel = require('../models/Hotel');
 
 //@desc Get all reviews
 //@route GET /api/v1/reviews
@@ -42,7 +43,7 @@ exports.getReviews = async (req, res, next) => {
 };
 
 //@desc Get single review
-//@route GET /api/v1/reviews/:id
+//@route GET /api/v1/review/:id
 //@access Public
 exports.getReview = async (req, res, next) => {
     try {
@@ -83,14 +84,14 @@ exports.addReview = async (req, res, next) => {
         }
         
         req.body.user = req.user.id;
-        
-        const existedReview = await Review.find({user: req.user.id, hotel: req.params.hotelId});
-        if (existedReview) {
-            return res.status(400).json({
-                success: false,
-                message: "this user already make an review on this hotel"
-            })
-        }
+
+        // const existedReview = await Review.find({user: req.user.id, hotel: req.params.hotelId});
+        // if (existedReview) {
+        //     return res.status(400).json({
+        //         success: false,
+        //         message: "this user already make an review on this hotel"
+        //     })
+        // }
         
         const review = await Review.create(req.body);
         res.status(200).json({
@@ -107,7 +108,7 @@ exports.addReview = async (req, res, next) => {
 }
 
 //@desc Update review
-//@route PUT /api/v1/reviews/:id
+//@route PUT /api/v1/review/:id
 //@access Private
 exports.updateReview = async (req, res, next) => {
     try {
@@ -145,7 +146,7 @@ exports.updateReview = async (req, res, next) => {
 
 
 //@desc Delete review
-//@route DELETE /api/v1/reviews/:id
+//@route DELETE /api/v1/review/:id
 //@access Private
 exports.deleteReview = async (req, res, next) => {
     try {

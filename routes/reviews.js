@@ -1,4 +1,4 @@
-const express = requibookingre('express');
+const express = require('express');
 const {getReviews, getReview, addReview, updateReview, deleteReview} = require('../controllers/reviews');
 
 const router = express.Router({mergeParams: true});

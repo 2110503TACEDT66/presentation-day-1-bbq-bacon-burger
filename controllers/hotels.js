@@ -17,6 +17,7 @@ exports.getHotels = async (req, res, next) => {
     queryStr = queryStr.replace(/\b(gt|gte|lt|lte|in)\b/g, match => `$${match}`);
 
     query = Hotel.find(JSON.parse(queryStr)).populate('booking');  
+    query = Hotel.find(JSON.parse(queryStr)).populate('review');
     //Select fields
     if (req.query.select) {
         const fields = req.query.select.split(',').join(' ');

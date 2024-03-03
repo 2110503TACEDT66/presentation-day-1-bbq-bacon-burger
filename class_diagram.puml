@@ -1,0 +1,25 @@
+@startuml
+class "Hotel" as hotel {
+    *ObjectId _id
+    --
+    *String name
+    *String address
+    *String tel
+    *Number capacity
+    --
+    *HotelSchema.pre()
+    *HotelSchema.virtual()
+}
+
+class "Booking" as booking {
+    *ObjectId User <<FK>>
+    *ObjectId Hotel <<FK>>
+    *ObjectId _id
+    --
+    *Date appDate
+    *Date createAt
+}
+
+hotel <-- booking
+
+@enduml

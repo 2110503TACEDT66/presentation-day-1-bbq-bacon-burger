@@ -34,7 +34,7 @@ exports.login = async (req, res, next) => {
         }
         
         //Check for user
-        const user = await  User.findOne({email}).select('+password');
+        const user = await User.findOne({email}).select('+password');
         
         if(!user){
             return res.status(400).json({success: false, error: 'Invalid credentials'});
@@ -73,7 +73,8 @@ const sendTokenResponse = (user, statusCode, res) => {
     
     res.status(statusCode).cookie('token', token, options).json({
         success: true,
-        token
+        token,
+        id: user._id
     });
 }
 

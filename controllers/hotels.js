@@ -1,4 +1,5 @@
 const Hotel = require('../models/Hotel');
+const fs = require('fs');
 
 //@desc Get all hotels
 //@route GET /api/v1/hotels
@@ -86,7 +87,15 @@ exports.getHotel = async (req, res, next) => {
 //@route POST /api/v1/hotels/:id
 //@access Private
 exports.createHotel = async (req, res, next) => {
-    const hotel = await Hotel.create(req.body);
+    //console.log("a");
+    var data = req.body
+    if (req.file && req.file.filename) {
+        data.file = req.file.filename;
+    } else {
+        // Handle the error condition here
+        return res.status(400).json({ error: "Please add a picture to the hotel" });
+    }
+    const hotel = await Hotel.create(data);
     res.status(201).json({
         success: true,
         data: hotel
@@ -124,6 +133,14 @@ exports.deleteHotel = async (req, res, next) => {
             });
         }
         await hotel.deleteOne();
+        if(hotel?.file){
+            await fs.unlink('./uploads/'+hotel.file,(err) => {
+            if(err){
+                res.status(400).json({success:false})
+                }
+            })
+        }
+        
         res.status(200).json({ success: true, data: {} });
     }catch(err){
         res.status(400).json({ success: false });

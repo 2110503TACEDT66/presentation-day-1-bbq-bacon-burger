@@ -1,3 +1,4 @@
+const Otp = require('../models/Otp');
 const User = require('../models/User');
 
 //@desc Register user
@@ -5,18 +6,25 @@ const User = require('../models/User');
 //@access Public
 exports.register = async (req, res, next) => {
     try {
-        const { name, email, password, role, tel } = req.body;
-        
-        //Create user
-        const user = await User.create({
+        const { name, email, password, role, tel, otp } = req.body;
+        // const token = user.getSignedJwtToken();
+        // res.status(200).json({ success: true, token });
+        const otpResponse = await Otp.find({email}).sort({createdAt: -1}).limit(1);
+        if (otpResponse.length === 0 || otp !== otpResponse[0].otp) {
+            return res.status(400).json({
+                success: false,
+                message: "invalid OTP"
+            })
+        }
+         //Create user
+         const user = await User.create({
             name, 
             email, 
             password, 
             role,
-            tel
+            tel,
+            otp
         });
-        // const token = user.getSignedJwtToken();
-        // res.status(200).json({ success: true, token });
         sendTokenResponse(user, 200, res);
     } catch (err) {
         res.status(400).json({ success: false });

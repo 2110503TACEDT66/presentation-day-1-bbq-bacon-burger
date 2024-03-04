@@ -1,6 +1,5 @@
 const mongoose = require('mongoose');
 
-
 const HotelSchema = new mongoose.Schema({
     name: {
         type: String,
@@ -21,6 +20,10 @@ const HotelSchema = new mongoose.Schema({
         min: [1, 'Capacity must be greater than 0'],
         required: [true, 'Please add a capacity']
     },
+    file:{
+        type:String,
+        required:[true,'Please add a picture of the hotel']
+    }
 },
 {
     toJSON: {virtuals: true},

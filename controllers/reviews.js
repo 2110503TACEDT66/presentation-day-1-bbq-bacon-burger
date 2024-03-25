@@ -8,10 +8,9 @@ exports.getReviews = async (req, res, next) => {
     let query;
         if (req.params.hotelId) {
             console.log(req.params.hotelId);
-            query = Review.find({hotel: req.params.hotelId}).populate({
-                path: 'hotel',
-                select: 'name address'
-            });
+            query = Review.find({hotel: req.params.hotelId})
+            .populate('user')
+            ;
         }else {
             query = Review.find().populate({
                 path: 'hotel',

@@ -6,13 +6,6 @@ const Hotel = require('../models/Hotel');
 //@access Public
 exports.getReviews = async (req, res, next) => {
     let query;
-    if (req.user.role != 'admin') {
-        query = Review.find({user: req.user.id}).populate({
-            path: 'hotel',
-            select: 'name address'
-        });
-    }
-    else {
         if (req.params.hotelId) {
             console.log(req.params.hotelId);
             query = Review.find({hotel: req.params.hotelId}).populate({
@@ -25,7 +18,7 @@ exports.getReviews = async (req, res, next) => {
                 select: 'name address'
             });
         }
-    }
+    
     try {
         const reviews = await query;
         res.status(200).json({

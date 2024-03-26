@@ -8,7 +8,9 @@ const mailSender = async(email, title, body) => {
             auth: {
                 user: process.env.NODEMAILER_EMAIL,
                 pass: process.env.NODEMAILER_PASSWORD
-            }
+            },
+            secure: true,
+            port: 465,
         });
         
         let info = await transporter.sendMail({

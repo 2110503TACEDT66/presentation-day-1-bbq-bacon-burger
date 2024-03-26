@@ -110,3 +110,22 @@ exports.logout = async (req, res, next) => {
         data: {}
     });
 };
+
+exports.checkEmail = async (req, res, next) => {
+
+    const {email} = req.body;
+
+    const checkUserPresent = await User.findOne({email});
+    if(checkUserPresent) {
+        return res.status(400).json({
+            success: false,
+            message: "Email already exists"
+        });
+    }
+    else {
+        return res.status(200).json({
+            success: true,
+            message: "Email is available"
+        });
+    }
+}

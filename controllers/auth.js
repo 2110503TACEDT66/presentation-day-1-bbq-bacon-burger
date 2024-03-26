@@ -113,7 +113,7 @@ exports.logout = async (req, res, next) => {
 
 exports.checkEmail = async (req, res, next) => {
 
-    const {email} = req.body;
+    const email = req.query.email;
 
     const checkUserPresent = await User.findOne({email});
     if(checkUserPresent) {
